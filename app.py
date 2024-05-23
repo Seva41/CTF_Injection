@@ -34,7 +34,7 @@ def home():
     """
     )
     # Set a session cookie for demonstration purposes
-    response.set_cookie("session", "admin_session_cookie")
+    response.set_cookie("session", "dbab0927aae35a9e36b2f91ef9b38261e9861e1bccc61c357713a010dbf564b0")
     return response
 
 
@@ -100,5 +100,10 @@ def admin_file():
     return "Access denied! <a href='/'>Back to Home</a>"
 
 
+@app.route("/favicon.ico")
+def favicon():
+    return app.send_static_file("favicon.ico")
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5001)
