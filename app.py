@@ -27,7 +27,7 @@ def home():
         password = request.form.get("password")
         if username and password:
             # Vulnerable a SQL Injection
-            if username == "' OR 1=1 --" and password == "' OR 1=1 --":
+            if username == "' OR 1=1 --" or password == "' OR 1=1 --":
                 session["logged_in"] = True
                 return redirect(url_for("success"))
             else:
