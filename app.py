@@ -1,4 +1,12 @@
-from flask import Flask, request, make_response, redirect, url_for, session
+from flask import (
+    Flask,
+    request,
+    make_response,
+    redirect,
+    url_for,
+    session,
+    render_template,
+)
 import base64
 
 app = Flask(__name__)
@@ -13,6 +21,7 @@ def encode_base64(plain_text):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    error = None
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -21,29 +30,16 @@ def home():
             if username == "' OR 1=1 --" and password == "' OR 1=1 --":
                 session["logged_in"] = True
                 return redirect(url_for("success"))
-        return "Invalid login!"
-
-    return """
-        <h2>Login</h2>
-        <form method="post">
-            Username: <input type="text" name="username">
-            Password: <input type="password" name="password">
-            <input type="submit" value="Login">
-        </form>
-    """
+            else:
+                error = "Invalid credentials!"
+    return render_template("home.html", error=error)
 
 
 @app.route("/success")
 def success():
     if not session.get("logged_in"):
         return "Unauthorized access", 403
-    return """
-        <h2>Success!</h2>
-        <p>You have successfully exploited SQL Injection.</p>
-        <form action="/download_xss" method="get">
-            <button type="submit">Download XSS Script</button>
-        </form>
-    """
+    return render_template("success.html")
 
 
 @app.route("/download_xss")

@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %}Success{% endblock %} {% block
+content %}
+<div class="container">
+  <div class="card">
+    <h2>Success!</h2>
+    <p>You have successfully exploited SQL Injection.</p>
+    <form action="/download_xss" method="get">
+      <button type="submit">Download XSS Script</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
