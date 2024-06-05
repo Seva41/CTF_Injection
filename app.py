@@ -6,6 +6,7 @@ from flask import (
     redirect,
     url_for,
 )
+import hashlib
 
 app = Flask(__name__)
 
@@ -19,9 +20,18 @@ final_flag = "segti{UNIQUE_FINAL_FLAG}"
 admin_file_content = final_flag
 
 
-# Landing page
+def hash_md5(text):
+    md5_hash = hashlib.md5()
+    md5_hash.update(text.encode("utf-8"))
+    return md5_hash.hexdigest()
+
+
 @app.route("/")
 def home():
+    session_value = hash_md5("th1s_1s_a_s3cur3_c00ki3")
+    print(
+        f"MD5 hash being set in the cookie: {session_value}"
+    )  # Print the hash to verify
     response = make_response(
         """
     <h1>Welcome to SecureMart</h1>
@@ -34,7 +44,7 @@ def home():
     """
     )
     # Set a session cookie for demonstration purposes
-    response.set_cookie("session", "dbab0927aae35a9e36b2f91ef9b38261e9861e1bccc61c357713a010dbf564b0")
+    response.set_cookie("session", session_value)
     return response
 
 
@@ -106,4 +116,4 @@ def favicon():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
+    app.run(debug=True)
