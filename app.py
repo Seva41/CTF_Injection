@@ -6,8 +6,11 @@ from flask import (
     url_for,
     session,
     render_template,
+    send_from_directory,
 )
 import base64
+import os
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key"  # Necesario para utilizar variables de sesión
@@ -19,6 +22,16 @@ def encode_base64(plain_text):
     return base64_bytes.decode("utf-8")
 
 
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not session.get("logged_in"):
+            return redirect(url_for("home"))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     error = None
@@ -27,7 +40,7 @@ def home():
         password = request.form.get("password")
         if username and password:
             # Vulnerable a SQL Injection
-            if username == "' OR 1=1 --" or password == "' OR 1=1 --":
+            if username == "' OR 1=1 --" and password == "' OR 1=1 --":
                 session["logged_in"] = True
                 return redirect(url_for("success"))
             else:
@@ -36,16 +49,14 @@ def home():
 
 
 @app.route("/success")
+@login_required
 def success():
-    if not session.get("logged_in"):
-        return "Unauthorized access", 403
     return render_template("success.html")
 
 
 @app.route("/download_xss")
+@login_required
 def download_xss():
-    if not session.get("logged_in"):
-        return "Unauthorized access", 403
     script = """
     fetch('/execute_xss', {
         headers: {
@@ -64,6 +75,7 @@ def download_xss():
 
 
 @app.route("/execute_xss")
+@login_required
 def execute_xss():
     if request.headers.get("X-Execute-XSS") == "true":
         message = "segti{XSS_3x3cut3d}"
@@ -73,6 +85,21 @@ def execute_xss():
         return response
     else:
         return "Unauthorized access", 403
+
+
+@app.route("/logout")
+def logout():
+    session.pop("logged_in", None)
+    return redirect(url_for("home"))
+
+
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/vnd.microsoft.icon",
+    )
 
 
 if __name__ == "__main__":
