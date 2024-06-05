@@ -23,14 +23,14 @@ def on_decrypt():
 
 # Create the main window
 root = tk.Tk()
-root.title("Base64 Decoder")
-root.geometry("400x300")
+root.title("Cookie Decoder")
+root.geometry("450x280")
 
 # Create and place the widgets
-label = tk.Label(root, text="Enter the Base64 encoded message:", font=("Arial", 12))
+label = tk.Label(root, text="Enter the encoded cookie:", font=("Arial", 12))
 label.pack(pady=10)
 
-entry = tk.Entry(root, width=50, font=("Arial", 12))
+entry = tk.Entry(root, width=25, font=("Arial", 12))
 entry.pack(pady=10)
 
 button = tk.Button(
