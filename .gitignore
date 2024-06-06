@@ -401,3 +401,6 @@ FodyWeavers.xsd
 http_server.spec
 build/
 dist/
+
+#macOS
+.DS_Store
