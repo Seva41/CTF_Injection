@@ -79,8 +79,8 @@ def download_xss():
     });
     """
     response = make_response(script)
-    response.headers["Content-Disposition"] = "attachment; filename=xss_script.js"
-    response.mimetype = "application/javascript"
+    response.headers["Content-Disposition"] = "attachment; filename=script.txt"
+    response.mimetype = "text/plain"
     return response
 
 
