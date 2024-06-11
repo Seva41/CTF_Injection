@@ -45,11 +45,6 @@ To set up the challenges, follow these steps:
    ```bash
    cd CTF_Injection
    ```
-3. Build and run the Docker containers:
-   ```bash
-   docker-compose up --build
-   ```
-
 This will set up the necessary environment to run the challenges. You can access the challenges at `http://localhost:PORT`, where `PORT` is the port number specified in the app setup.
 
 ## Requirements
