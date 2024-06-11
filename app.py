@@ -13,7 +13,6 @@ from functools import wraps
 import os
 
 app = Flask(__name__)
-app.secret_key = "super_secret_key"  # Necesario para utilizar variables de sesión
 
 
 def encode_base64(plain_text):
@@ -21,6 +20,7 @@ def encode_base64(plain_text):
     base64_bytes = base64.b64encode(message_bytes)
     return base64_bytes.decode("utf-8")
 
+app.secret_key = encode_base64("SegTI#2024!")
 
 def login_required(func):
     @wraps(func)
@@ -64,6 +64,7 @@ def success():
     return render_template("success.html")
 
 
+
 @app.route("/download_xss")
 @login_required
 def download_xss():
@@ -105,11 +106,7 @@ def execute_xss_redirect():
 
 @app.route("/favicon.ico")
 def favicon():
-    return send_from_directory(
-        os.path.join(app.root_path, "static"),
-        "favicon.ico",
-        mimetype="image/vnd.microsoft.icon",
-    )
+    return app.send_static_file('favicon.ico')
 
 
 @app.route("/logout")
@@ -119,4 +116,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
