@@ -20,7 +20,9 @@ def encode_base64(plain_text):
     base64_bytes = base64.b64encode(message_bytes)
     return base64_bytes.decode("utf-8")
 
-app.secret_key = encode_base64("SegTI#2024!")
+
+app.secret_key = encode_base64("SegTI#2024!2")
+
 
 def login_required(func):
     @wraps(func)
@@ -64,7 +66,6 @@ def success():
     return render_template("success.html")
 
 
-
 @app.route("/download_xss")
 @login_required
 def download_xss():
@@ -97,7 +98,7 @@ def execute_xss():
 @app.route("/execute_xss_redirect")
 @login_required
 def execute_xss_redirect():
-    message = "segti{d3crypt_c00k13s_15_fun}"
+    message = "segti{d3crypt_c00k13s_4r3_p0w3rful}"
     encrypted_message = encode_base64(message)
     response = make_response(render_template("execute_xss.html"))
     response.set_cookie("session", encrypted_message, samesite="None", secure=True)
@@ -106,7 +107,7 @@ def execute_xss_redirect():
 
 @app.route("/favicon.ico")
 def favicon():
-    return app.send_static_file('favicon.ico')
+    return app.send_static_file("favicon.ico")
 
 
 @app.route("/logout")
